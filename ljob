@@ -4,7 +4,8 @@
 # tracking jobs for baldwin linguas
 # for internal use only
 
-ljpath="/home/tony/linguas/bzdox/ljobs"
+source ~/.ljobs.conf
+
 filedate=$(date +%Y%m%d%H%M%S)
 cd $ljpath
 
