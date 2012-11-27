@@ -20,7 +20,7 @@ if [[ $1 = r ]]; then
 	fi
 else
 if [[ $1 = h ]]; then
-	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljob
+	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljobs
 ljob n - creates a new ljob file.
 ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
