@@ -1,0 +1,258 @@
+#!/bin/bash
+
+# ljobs by tony baldwin
+# tracking jobs for baldwin linguas
+# for internal use only
+
+ljpath="/home/tony/linguas/bzdox/ljobs"
+filedate=$(date +%Y%m%d%H%M%S)
+cd $ljpath
+
+if [[ $1 = r ]]; then
+	if [[ $2 ]]; then
+		cat $2*.ljob | less
+	else
+		for i in $(ls -Rt *.ljob); do cat $i; done | less
+	fi
+else
+if [[ $1 = h ]]; then
+	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/software
+ljob n - creates a new ljob file.
+ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
+ljob r - reads all entries (cats all files in the dir, pipes to less)
+ljob r yyyymmdd - reads entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
+ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
+ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
+ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
+ljob lx - lists expense reports. Can be limited with date parameters.
+ljob s searchterm - searches for searchterm in dream entries.
+ljob month yyyymm - generates and displays income report for month yyyymm, to date.
+ljob year yyyy - generates and displays income report for year yyyy, to date.
+ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
+ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
+ljob h - displays this help message."
+else
+if [[ $1 = xa ]]; then
+	xdate=$(date +%Y%m%d)
+	read -p "Paid to: (name of store, utility, etc.) " xto
+	read -p "Type (office supplies, travel, utilities, rent, etc.) " xtype
+	read -p "Description (more specific than type): " xdesc
+	read -p "Amount: " xamt
+	echo "Date	$xdate
+Paid to	$xto
+Type	$xtype
+Description	$xdesc
+Amount	$xamt" > $filedate.exp
+else
+if [[ $1 = xr ]]; then
+	if [[ $2 ]]; then
+		for ex in $(ls $2*.exp); do
+			grep Amount $ex | awk '{ print $2 }' >> $2.exp
+		done
+		xpns=0
+		for xp in $(cat $2.exp); do
+			xpns=`echo "$xpns+$xp" | bc`
+		done
+		echo "----
+Total expense for $2 = $xpns" > $2.exp
+		cat $2*.exp | less
+		rm $2.exp
+	else
+		echo "You neglected to provide data parameters. Try again."	
+	fi
+else
+if [[ $1 = l ]]; then
+	if [[ $2 ]]; then
+		ls -1t | grep $2
+	else
+		ls -1t
+	fi
+else
+if [[ $1 = lr ]]; then
+	if [[ $2 ]]; then
+		ls -1t *.month | grep $2
+		ls -1t *.year | grep $2
+	else
+		ls -1t *.month
+		ls -1t *.year
+	fi
+else
+if [[ $1 = lx ]]; then
+	if [[ $2 ]]; then
+		ls -1t *.exp | grep $2
+	else
+		ls -1t *.exp
+	fi
+else
+if [[ $1 = lj ]]; then
+	if [[ $2 ]]; then
+		ls -1t *.ljob | grep $2
+	else
+		ls -1t *.ljob
+	fi
+else
+if [[ $1 = s ]]; then
+	grep -iw $2 *
+else
+if [[ $1 = e ]]; then
+	vim $2
+else
+if [[ $1 = n ]]; then
+	if [ $2 ]; then
+		jobname=$2.ljob
+	else
+		jobname=$filedate.ljob
+	fi
+	jdate=$(date +%Y%m%d)
+	read -p "client ID: " client
+	read -p "service: " service
+	read -p "volume: " volume
+	read -p "units: " units
+	read -p "rate: " rate
+	read -p "currency: " currency
+	read -p "due (mm/dd HH:MM): " duedate
+	read -p "outsourcing (y/n): " outs
+	read -p "paidouts: " pdouts
+	read -p "description: " desc
+	grossin=`echo "$volume*$rate" | bc`
+	netin=`echo "$grossin-$pdouts" | bc`
+	echo "projID	$client.$jdate
+datein	$jdate
+client	$client
+service	$service
+volume	$volume
+units	$units
+rate	$rate
+currency	$currency
+grossincome	$grossin
+outsourced	$outs
+paidouts	$pdouts
+netincome	$netin
+due date	$due	
+deliverydate	
+providerspaid	
+invoicepaidate	
+	
+descrition and notes:
+$desc " > $jobname
+	echo "New job entered: 
+	------------------------------------------"
+	 cat $jobname
+	 read -p "Edit this job file? (y/n) " ednow
+	 if [[ $ednow = y ]]; then
+		 vim $jobname
+	fi
+else
+if [[ $1 = month ]]; then
+	if [ -e $2.month ]; then
+		read -p "Report exists. View or Recreate? (v/r) " po0p
+		if [ $po0p = v ]; then
+			cat $2.month
+		else 
+			mv $2.month $2.month.bak
+			mv $2.expense $2.expense.bak
+		fi
+	fi
+		gross=0
+		paid=0
+		neti=0
+		xpns=0
+		for job in $(ls $2*.ljob); do
+			grep grossincome $job | awk '{ print $2 }' >> $2.gross
+			grep paidouts $job | awk '{ print $2 }' >> $2.out
+			grep netincome $job | awk '{ print $2 }' >> $2.net
+		done
+		for ex in $(ls $2*.exp); do
+			grep Amount $ex| awk '{ print $2 }' >> $2.expense
+		done
+		for xp in $(cat $2.expense); do
+			xpns=`echo "$xpns+$xp" | bc`
+		done
+		for g in $(cat $2.gross); do
+			gross=`echo "$gross+$g" | bc`
+		done
+		for pd in $(cat $2.out); do
+			paid=`echo "$paid+$pd" | bc`
+		done
+		for ni in $(cat $2.net); do
+			neti=`echo "$neti+$ni" | bc`
+		done
+			echo "----- Monthly Income Report $2 -----"
+			echo "reported gross income for $2 = $gross" >> $2.month
+			netminx=`echo "$neti-$xpns" | bc`
+			repnet=`echo "$gross-$paid" | bc`
+			echo "reported total paidouts for $2 = $paid" >> $2.month
+			echo "reported net income from ljobs $2 = $neti" >> $2.month
+			echo "Verification: $gross - $paid = $repnet"
+			echo "This should be the same as $neti." >> $2.month
+			echo "Expenses for $2 equal $xpns" >> $2.month
+			echo "Net income, after expenses, for $2 = $netminx" >> $2.month
+		rm $2.gross 
+		rm $2.out 
+		rm $2.net
+		cat $2.month
+		echo "report saved as $ljpath/$2.month"
+else
+if [[ $1 = year ]]; then
+	if [ -e $2.year ]; then
+		read -p "Report exists. View or Recreate? (v/r) " po0p
+		if [ $po0p = v ]; then
+			cat $2.year
+		else 
+			mv $2.year $2.year.bak
+			mv $2.expense $2.expense.bak
+		fi
+	fi
+		gross=0
+		paid=0
+		neti=0
+		xpns=0
+		for job in $(ls $2*.ljob); do
+			grep grossincome $job | awk '{ print $2 }' >> $2.gross
+			grep paidouts $job | awk '{ print $2 }' >> $2.out
+			grep netincome $job | awk '{ print $2 }' >> $2.net
+		done
+		for ex in $(ls $2*.exp); do
+			grep Amount $ex | awk '{ print $2 }' >> $2.expense
+		done
+		for xp in $(cat $2.expense); do
+			xpns=`echo "$xpns+$xp" | bc`
+		done
+		for g in $(cat $2.gross); do
+			gross=`echo "$gross+$g" | bc`
+		done
+		for pd in $(cat $2.out); do
+			paid=`echo "$paid+$pd" | bc`
+		done
+		for ni in $(cat $2.net); do
+			neti=`echo "$neti+$ni" | bc`
+		done
+			echo "----- Yearly Income Report $2 -----"
+			echo "reported gross income for $2 = $gross" >> $2.year
+			netminx=`echo "$neti-$xpns" | bc`
+			repnet=`echo "$gross-$paid" | bc`
+			echo "reported total paidouts for $2 = $paid" >> $2.year
+			echo "reported net income from ljobs $2 = $neti" >> $2.year
+			echo "Verification: $gross - $paid = $repnet"
+			echo "This should be the same as $neti." >> $2.year
+			echo "Expenses for $2 equal $xpns" >> $2.year
+			echo "Net income, after expenses, for $2 = $netminx" >> $2.year
+		rm $2.gross 
+		rm $2.out 
+		rm $2.net
+		cat $2.year
+		echo "report saved as $ljpath/$2.year"
+fi
+fi
+fi	
+fi	
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+fi
+exit

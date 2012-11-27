@@ -1,0 +1,14 @@
+ljobs.sh - language jobs management in bash
+by tony baldwin
+http://tonyb.us/ljobs
+
+A quick and simple means of logging and tracking relevant data
+for language services provider jobs (translation, localization, interpreting, etc.), and generating monthly and yearly income reports.
+
+INSTALLATION
+------------
+run install.sh
+This will place ljobs in ~/bin/ljob
+
+For usage run
+ljob h
