@@ -24,7 +24,7 @@ if [[ $1 = h ]]; then
 ljob n - creates a new ljob file.
 ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
-ljob r yyyymmdd - reads entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
+ljob r yyyymmdd - reads job entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
 ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
 ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
@@ -132,7 +132,7 @@ grossincome	$grossin
 outsourced	$outs
 paidouts	$pdouts
 netincome	$netin
-due date	$due	
+due date	$duedate
 deliverydate	
 providerspaid	
 invoicepaidate	
