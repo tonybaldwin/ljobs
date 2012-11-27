@@ -13,7 +13,7 @@ if [ != "$HOME/bin/" ]; then
 	export PATH
 fi
 
-ljpath=$HOME/.ljobs
+ljpath="$HOME/.ljobs/"
 editor="/usr/bin/vim"
 
 echo "installing ljobs ... "
@@ -21,7 +21,7 @@ cp ljob $HOME/bin/ljob
 chmod +x $HOME/bin/ljob
 
 echo "Creating config files ... "
-read -p "Where do you wish to keep your ljobs files? (default ~/.ljobs): " ljpath
+read -p "Where do you wish to keep your ljobs files? (default ~/.ljobs/ If you choose another directory, do not forget trailing slash.): " ljpath
 read -p "What is your prefered editor? (default /usr/bin/vim): " editor
 
 echo "ljpath=$ljpath" >> $HOME/.ljobs.conf
