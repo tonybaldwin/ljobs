@@ -1,8 +1,11 @@
 #!/bin/bash
 
-# ljobs by tony baldwin
-# tracking jobs for baldwin linguas
-# for internal use only
+##############################################################
+# ljobs                                                      #
+# language jobs management in bash by tony baldwin           #
+# http://tonyb.us/ljobs                                      #
+# released according to the terms of the GNU GPL v.3 or later#
+##############################################################
 
 source ~/.ljobs.conf
 
