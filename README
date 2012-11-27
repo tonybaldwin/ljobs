@@ -1,6 +1,6 @@
 ljobs.sh - language jobs management in bash
 by tony baldwin
-http://tonyb.us/ljobs
+website: http://tonyb.us/ljobs
 
 A quick and simple means of logging and tracking relevant data
 for language services provider jobs (translation, localization, interpreting, etc.), and generating monthly and yearly income reports.
@@ -10,5 +10,20 @@ INSTALLATION
 run install.sh
 This will place ljobs in ~/bin/ljob
 
-For usage run
-ljob h
+USEAGE
+------------
+ljob n - creates a new ljob file.
+ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
+ljob r - reads all entries (cats all files in the dir, pipes to less)
+ljob r yyyymmdd - reads entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
+ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
+ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
+ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
+ljob lx - lists expense reports. Can be limited with date parameters.
+ljob s searchterm - searches for searchterm in dream entries.
+ljob month yyyymm - generates and displays income report for month yyyymm, to date.
+ljob year yyyy - generates and displays income report for year yyyy, to date.
+ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
+ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
+ljob h - displays this help message.
+
