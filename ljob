@@ -137,7 +137,7 @@ deliverydate
 providerspaid	
 invoicepaidate	
 	
-descrition and notes:
+description and notes:
 $desc 
 -----------------
 " > $jobname
