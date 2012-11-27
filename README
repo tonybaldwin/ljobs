@@ -5,6 +5,12 @@ website: http://tonyb.us/ljobs
 A quick and simple means of logging and tracking relevant data
 for language services provider jobs (translation, localization, interpreting, etc.), and generating monthly and yearly income reports.
 
+ljob is Free Software, provide freely and free of charge, and you are free to modify it,
+share it, share modifications of it, install it, hack on it, use it, read the code of it,
+print it out and hang it on your fridge, or whatever else you like.
+ljob comes with no guarantees or warranties of usability or precision, etc.
+Install and use at your own risk.
+
 INSTALLATION
 ------------
 run install.sh
@@ -27,3 +33,4 @@ ljob xa - add an expense item (non-providers, i.e., utilities, travel, office su
 ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
 ljob h - displays this help message.
 
+For further information see http://tonyb.us/ljobs
