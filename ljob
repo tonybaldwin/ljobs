@@ -138,7 +138,9 @@ providerspaid
 invoicepaidate	
 	
 descrition and notes:
-$desc " > $jobname
+$desc 
+-----------------
+" > $jobname
 	echo "New job entered: 
 	------------------------------------------"
 	 cat $jobname
