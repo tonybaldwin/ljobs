@@ -183,15 +183,16 @@ if [[ $1 = month ]]; then
 		for ni in $(cat $2.net); do
 			neti=`echo "$neti+$ni" | bc`
 		done
-			echo "----- Monthly Income Report $2 -----" >> $2.month
-			echo "reported gross income for $2 = $gross" >> $2.month
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
+			echo "----- Monthly Income Report $2 -----" >> $2.month
+			echo "reported gross income for $2 = $gross" >> $2.month
 			echo "reported total paidouts for $2 = $paid" >> $2.month
 			echo "reported net income from ljobs $2 = $neti" >> $2.month
 			echo "Verification: $gross - $paid = $repnet" >> $2.month
 			echo "This should be the same as $neti." >> $2.month
-			echo "Expenses for $2 equal $xpns" >> $2.month
+			echo "Expenses for $2 = $xpns" >> $2.month
+			echo "-------------------------------------" >> $2.month
 			echo "Net income, after expenses, for $2 = $netminx" >> $2.month
 		rm $2.gross 
 		rm $2.out 
@@ -233,15 +234,16 @@ if [[ $1 = year ]]; then
 		for ni in $(cat $2.net); do
 			neti=`echo "$neti+$ni" | bc`
 		done
-			echo "----- Yearly Income Report $2 -----" >> $2.year
-			echo "reported gross income for $2 = $gross" >> $2.year
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
+			echo "----- Yearly Income Report $2 -----" >> $2.year
+			echo "reported gross income for $2 = $gross" >> $2.year
 			echo "reported total paidouts for $2 = $paid" >> $2.year
 			echo "reported net income from ljobs $2 = $neti" >> $2.year
 			echo "Verification: $gross - $paid = $repnet" >> $2.year
 			echo "This should be the same as $neti." >> $2.year
-			echo "Expenses for $2 equal $xpns" >> $2.year
+			echo "Expenses for $2 = $xpns" >> $2.year
+			echo "----------------------------------" >> $2.year
 			echo "Net income, after expenses, for $2 = $netminx" >> $2.year
 		rm $2.gross 
 		rm $2.out 
