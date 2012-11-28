@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 ##############################################################
 # ljobs                                                      #
@@ -47,6 +47,7 @@ Paid to	$xto
 Type	$xtype
 Description	$xdesc
 Amount	$xamt" > $filedate.exp
+echo "----------------------" >> $filedate.exp
 else
 if [[ $1 = xr ]]; then
 	if [[ $2 ]]; then
