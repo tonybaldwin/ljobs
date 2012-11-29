@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 ##############################################################
 # ljobs                                                      #
@@ -111,6 +111,7 @@ if [[ $1 = n ]]; then
 	jdate=$(date +%Y%m%d)
 	read -p "client ID: " client
 	read -p "service: " service
+	read -p "language(s): " langs
 	read -p "volume: " volume
 	read -p "units: " units
 	read -p "rate: " rate
@@ -125,6 +126,7 @@ if [[ $1 = n ]]; then
 datein	$jdate
 client	$client
 service	$service
+language(s)	$langs
 volume	$volume
 units	$units
 rate	$rate
