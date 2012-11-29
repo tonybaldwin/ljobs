@@ -27,6 +27,7 @@ ljob r - reads all entries (cats all files in the dir, pipes to less)
 ljob r yyyymmdd - reads job entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
 ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
 ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
+ljob lo - list only jobs with outsourcing; can be limited to date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
 ljob s searchterm - searches for searchterm in dream entries.
@@ -94,6 +95,13 @@ if [[ $1 = lj ]]; then
 		ls -1t *.ljob | grep $2
 	else
 		ls -1t *.ljob
+	fi
+else
+if [[ $1 = lo ]]; then
+	if [[ $2 ]]; then
+		grep -P -i "outsourced\ty" * | grep $2
+	else
+		grep -P -i "outsourced\ty" *
 	fi
 else
 if [[ $1 = s ]]; then
@@ -257,6 +265,7 @@ fi
 fi
 fi	
 fi	
+fi
 fi
 fi
 fi
