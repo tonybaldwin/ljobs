@@ -165,6 +165,7 @@ if [[ $1 = month ]]; then
 		read -p "Report exists. View or Recreate? (v/r) " po0p
 		if [ $po0p = v ]; then
 			cat $2.month
+			exit
 		else 
 			mv $2.month $2.month.bak
 			mv $2.expense $2.expense.bak
@@ -196,7 +197,7 @@ if [[ $1 = month ]]; then
 		done
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
-			echo "----- Monthly Income Report $2 -----" >> $2.month
+			echo "----- Monthly Income Report $2 -----" > $2.month
 			echo "reported gross income for $2 = $gross" >> $2.month
 			echo "reported total paidouts for $2 = $paid" >> $2.month
 			echo "reported net income from ljobs $2 = $neti" >> $2.month
@@ -216,6 +217,7 @@ if [[ $1 = year ]]; then
 		read -p "Report exists. View or Recreate? (v/r) " po0p
 		if [ $po0p = v ]; then
 			cat $2.year
+			exit
 		else 
 			mv $2.year $2.year.bak
 			mv $2.expense $2.expense.bak
@@ -247,7 +249,7 @@ if [[ $1 = year ]]; then
 		done
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
-			echo "----- Yearly Income Report $2 -----" >> $2.year
+			echo "----- Yearly Income Report $2 -----" > $2.year
 			echo "reported gross income for $2 = $gross" >> $2.year
 			echo "reported total paidouts for $2 = $paid" >> $2.year
 			echo "reported net income from ljobs $2 = $neti" >> $2.year
