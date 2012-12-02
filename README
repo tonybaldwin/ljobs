@@ -33,6 +33,8 @@ ljob month yyyymm - generates and displays income report for month yyyymm, to da
 ljob year yyyy - generates and displays income report for year yyyy, to date.
 ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
 ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
+ljob up - list unpaid jobs.
+ljob us - list jobs with unsettled provider invoices.
 ljob h - displays this help message.
 
 CURRENCY

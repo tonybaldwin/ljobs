@@ -37,6 +37,8 @@ ljob mo yyyymm - generates and displays income report for month yyyymm, to date.
 ljob yr yyyy - generates and displays income report for year yyyy, to date.
 ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
 ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
+ljob up - list jobs as yet unpaid.
+ljob us - list jobs with unsettled provider invoices.
 ljob h - displays this help message."
 else
 if [[ $1 = xa ]]; then
@@ -110,6 +112,20 @@ if [[ $1 = s ]]; then
 		grep -iw $2 * | grep $3
 	else
 	grep -iw $2 *
+	fi
+else
+if [[ $1 = up ]]; then
+	if [[ $2 ]];then 
+		grep -iw UNPAID * | grep $2
+	else
+		grep iw UNPAID *
+	fi
+else
+if [[ $1 = us ]]; then
+	if [[ $2 ]];then 
+		grep -iw UNSETTLED * | grep $2
+	else
+		grep iw UNSETTLED *
 	fi
 else
 if [[ $1 = v ]]; then
@@ -269,6 +285,8 @@ fi
 fi
 fi	
 fi	
+fi
+fi
 fi
 fi
 fi
