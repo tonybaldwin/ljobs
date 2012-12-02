@@ -118,14 +118,14 @@ if [[ $1 = up ]]; then
 	if [[ $2 ]];then 
 		grep -iw UNPAID * | grep $2
 	else
-		grep iw UNPAID *
+		grep -iw UNPAID *
 	fi
 else
 if [[ $1 = us ]]; then
 	if [[ $2 ]];then 
 		grep -iw UNSETTLED * | grep $2
 	else
-		grep iw UNSETTLED *
+		grep -iw UNSETTLED *
 	fi
 else
 if [[ $1 = v ]]; then
