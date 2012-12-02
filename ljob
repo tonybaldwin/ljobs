@@ -132,7 +132,7 @@ if [[ $1 = v ]]; then
 	less $2
 else
 if [[ $1 = e ]]; then
-	vim $2
+	$editor $2
 else
 if [[ $1 = n ]]; then
 	jdate=$(date +%Y%m%d)
@@ -175,7 +175,7 @@ $desc
 	 cat $jobname
 	 read -p "Edit this job file? (y/n) " ednow
 	 if [[ $ednow = y ]]; then
-		 vim $jobname
+		 $editor $jobname
 	fi
 else
 if [[ $1 = mo ]]; then
