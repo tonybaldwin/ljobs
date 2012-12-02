@@ -23,7 +23,8 @@ if [[ $1 = h || -z $1 ]]; then
 	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljobs
 	-----------------------------------------------------------------------------------------
 ljob n - creates a new ljob file.
-ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
+ljob e - opens a file for editing. MUST specify full file name (i.e. ljob e 20121031082439.ljob)
+ljob v - view file. Must specify full file name (i.e. ljob v 201203241542.exp)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
 ljob r yyyymmdd - reads job entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
 ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
@@ -31,7 +32,7 @@ ljob lj - lists all ljob entries. Like r, it can be narrowed down with date para
 ljob lo - list only jobs with outsourcing; can be limited to date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
-ljob s searchterm - searches for searchterm in dream entries.
+ljob s searchterm - searches for searchterm in dream entries. Can be limited with data parameters (i.e. ljob s searchterm YYYYMM).
 ljob mo yyyymm - generates and displays income report for month yyyymm, to date.
 ljob yr yyyy - generates and displays income report for year yyyy, to date.
 ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
@@ -49,7 +50,7 @@ Paid to	$xto
 Type	$xtype
 Description	$xdesc
 Amount	$xamt" > $filedate.exp
-echo "----------------------" >> $filedate.exp
+echo "------------" >> $filedate.exp
 else
 if [[ $1 = xr ]]; then
 	if [[ $2 ]]; then
@@ -60,8 +61,7 @@ if [[ $1 = xr ]]; then
 		for xp in $(cat $2.exp); do
 			xpns=`echo "$xpns+$xp" | bc`
 		done
-		echo "----
-Total expense for $2 = $xpns" > $2.exp
+		echo " Total expense for $2 = $xpns" > $2.exp
 		cat $2*.exp | less
 		rm $2.exp
 	else
@@ -106,7 +106,14 @@ if [[ $1 = lo ]]; then
 	fi
 else
 if [[ $1 = s ]]; then
+	if [[ $3 ]]; then
+		grep -iw $2 * | grep $3
+	else
 	grep -iw $2 *
+	fi
+else
+if [[ $1 = v ]]; then
+	less $2
 else
 if [[ $1 = e ]]; then
 	vim $2
@@ -262,6 +269,7 @@ fi
 fi
 fi	
 fi	
+fi
 fi
 fi
 fi
