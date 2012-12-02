@@ -19,8 +19,9 @@ if [[ $1 = r ]]; then
 		for i in $(ls -Rt *.ljob); do cat $i; done | less
 	fi
 else
-if [[ $1 = h ]]; then
+if [[ $1 = h || -z $1 ]]; then
 	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljobs
+	-----------------------------------------------------------------------------------------
 ljob n - creates a new ljob file.
 ljob e - opens a job file for editing. MUST specify full job file name (i.e. ljob e 20121031082439.ljob)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
@@ -31,8 +32,8 @@ ljob lo - list only jobs with outsourcing; can be limited to date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
 ljob s searchterm - searches for searchterm in dream entries.
-ljob month yyyymm - generates and displays income report for month yyyymm, to date.
-ljob year yyyy - generates and displays income report for year yyyy, to date.
+ljob mo yyyymm - generates and displays income report for month yyyymm, to date.
+ljob yr yyyy - generates and displays income report for year yyyy, to date.
 ljob xa - add an expense item (non-providers, i.e., utilities, travel, office supplies, etc.)
 ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
 ljob h - displays this help message."
@@ -111,42 +112,36 @@ if [[ $1 = e ]]; then
 	vim $2
 else
 if [[ $1 = n ]]; then
-	if [ $2 ]; then
-		jobname=$2.ljob
-	else
-		jobname=$filedate.ljob
-	fi
 	jdate=$(date +%Y%m%d)
 	read -p "client ID: " client
 	read -p "service: " service
 	read -p "language(s): " langs
 	read -p "volume: " volume
-	read -p "units: " units
+	read -p "unit: " units
 	read -p "rate: " rate
-	read -p "currency: " currency
 	read -p "due (mm/dd HH:MM): " duedate
 	read -p "outsourcing (y/n): " outs
 	read -p "paidouts: " pdouts
 	read -p "description: " desc
 	grossin=`echo "$volume*$rate" | bc`
 	netin=`echo "$grossin-$pdouts" | bc`
+	jobname=$filedate.$client.ljob	
 	echo "projID	$client.$jdate
-datein	$jdate
+date in	$jdate
 client	$client
 service	$service
 language(s)	$langs
 volume	$volume
-units	$units
-rate	$rate
 currency	$currency
+rate	$rate / $units
 grossincome	$grossin
 outsourced	$outs
 paidouts	$pdouts
 netincome	$netin
 due date	$duedate
-deliverydate	
-providerspaid	
-invoicepaidate	
+deliverydate	UNDELIVERED (update upon delivery)
+providerspaid	UNSETTLED (if applicable, update when provider invoices settled)
+invoicepaidate	UNPAID (update upon receipt of payment)
 	
 description and notes:
 $desc 
@@ -160,7 +155,7 @@ $desc
 		 vim $jobname
 	fi
 else
-if [[ $1 = month ]]; then
+if [[ $1 = mo ]]; then
 	if [ -e $2.month ]; then
 		read -p "Report exists. View or Recreate? (v/r) " po0p
 		if [ $po0p = v ]; then
@@ -198,21 +193,21 @@ if [[ $1 = month ]]; then
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
 			echo "----- Monthly Income Report $2 -----" > $2.month
-			echo "reported gross income for $2 = $gross" >> $2.month
-			echo "reported total paidouts for $2 = $paid" >> $2.month
-			echo "reported net income from ljobs $2 = $neti" >> $2.month
+			echo "reported gross income for $2 = $currency $gross" >> $2.month
+			echo "reported total paidouts for $2 = $currency $paid" >> $2.month
+			echo "reported net income from ljobs $2 = $currency $neti" >> $2.month
 			echo "Verification: $gross - $paid = $repnet" >> $2.month
-			echo "This should be the same as $neti." >> $2.month
+			echo "This should be the same as $currency $neti." >> $2.month
 			echo "Expenses for $2 = $xpns" >> $2.month
 			echo "-------------------------------------" >> $2.month
-			echo "Net income, after expenses, for $2 = $netminx" >> $2.month
+			echo "Net income, after expenses, for $2 = $currency $netminx" >> $2.month
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net
 		cat $2.month
 		echo "report saved as $ljpath/$2.month"
 else
-if [[ $1 = year ]]; then
+if [[ $1 = yr ]]; then
 	if [ -e $2.year ]; then
 		read -p "Report exists. View or Recreate? (v/r) " po0p
 		if [ $po0p = v ]; then
@@ -250,14 +245,14 @@ if [[ $1 = year ]]; then
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
 			echo "----- Yearly Income Report $2 -----" > $2.year
-			echo "reported gross income for $2 = $gross" >> $2.year
-			echo "reported total paidouts for $2 = $paid" >> $2.year
-			echo "reported net income from ljobs $2 = $neti" >> $2.year
-			echo "Verification: $gross - $paid = $repnet" >> $2.year
-			echo "This should be the same as $neti." >> $2.year
-			echo "Expenses for $2 = $xpns" >> $2.year
+			echo "reported gross income for $2 = $currency $gross" >> $2.year
+			echo "reported total paidouts for $2 = $currency $paid" >> $2.year
+			echo "reported net income from ljobs $2 = $currency $neti" >> $2.year
+			echo "Verification: $gross - $paid = $currency $repnet" >> $2.year
+			echo "This should be the same as $currency $neti." >> $2.year
+			echo "Expenses for $2 = $currency $xpns" >> $2.year
 			echo "----------------------------------" >> $2.year
-			echo "Net income, after expenses, for $2 = $netminx" >> $2.year
+			echo "Net income, after expenses, for $2 = $currency $netminx" >> $2.year
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net

@@ -26,6 +26,7 @@ ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
 ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
+ljob lo - list only jobs with outsourcing
 ljob s searchterm - searches for searchterm in dream entries.
 ljob month yyyymm - generates and displays income report for month yyyymm, to date.
 ljob year yyyy - generates and displays income report for year yyyy, to date.
@@ -33,4 +34,11 @@ ljob xa - add an expense item (non-providers, i.e., utilities, travel, office su
 ljob xr - read expense report, limited with date parameters (ljob xr 201211 for expense report for Nov. 2012)
 ljob h - displays this help message.
 
+CURRENCY
+You must be consistent in the use of a currency, since ljobs.sh does NOT make conversions for you.
+I.e., if you are listing in jobs in different currencies, the math in monthly and yearly reports will NOT be accurate.
+Your default currency (entered upon installation) is stored in the .ljobs.conf file.
+For free currency conversions, see http://www.xe.com
+
+TIPS
 For further information see http://tonyb.us/ljobs
