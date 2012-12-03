@@ -22,7 +22,8 @@ else
 if [[ $1 = h || -z $1 ]]; then
 	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljobs
 	-----------------------------------------------------------------------------------------
-ljob n - creates a new ljob file.
+ljob n - creates a new ljob file (automatic assignment of filename).
+ljob n filename - creates new job file with \"filename\" as the name. filename must beging with date parameters (YYYYMMDD) for other functions to work properly!
 ljob e - opens a file for editing. MUST specify full file name (i.e. ljob e 20121031082439.ljob)
 ljob v - view file. Must specify full file name (i.e. ljob v 201203241542.exp)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
@@ -148,7 +149,11 @@ if [[ $1 = n ]]; then
 	read -p "description: " desc
 	grossin=`echo "$volume*$rate" | bc`
 	netin=`echo "$grossin-$pdouts" | bc`
-	jobname=$filedate.$client.ljob	
+	if [[ $2 ]]; then
+		jobname=$2.ljob
+	else
+		jobname=$filedate.$client.ljob	
+	fi
 	echo "projID	$client.$jdate
 date in	$jdate
 client	$client
