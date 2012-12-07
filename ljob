@@ -136,6 +136,8 @@ if [[ $1 = e ]]; then
 	$editor $2
 else
 if [[ $1 = n ]]; then
+	provs=n
+	outs=y
 	jdate=$(date +%Y%m%d)
 	read -p "client ID: " client
 	read -p "service: " service
@@ -145,6 +147,9 @@ if [[ $1 = n ]]; then
 	read -p "rate: " rate
 	read -p "due (mm/dd HH:MM): " duedate
 	read -p "outsourcing (y/n): " outs
+	if [[ $outs == "y" ]]; then
+	read -p "provider(s): " provs
+	fi
 	read -p "paidouts: " pdouts
 	read -p "description: " desc
 	grossin=`echo "$volume*$rate" | bc`
@@ -163,20 +168,23 @@ volume	$volume
 currency	$currency
 rate	$rate / $units
 grossincome	$grossin
-outsourced	$outs
 paidouts	$pdouts
 netincome	$netin
 due date	$duedate
-deliverydate	UNDELIVERED (update upon delivery)
-providerspaid	UNSETTLED (if applicable, update when provider invoices settled)
-invoicepaidate	UNPAID (update upon receipt of payment)
-	
+deliverydate	UNDELIVERED (update upon delivery)" > $jobname
+if [[ $outs == "y" ]]; then
+	echo "outsourced	$outs
+providerspaid	UNSETTLED (update when provider invoices settled)
+providers	$provs" >> $jobname
+fi
+echo "invoicepaidate	UNPAID (update upon receipt of payment)
+---------------------------------------------------------------
 description and notes:
 $desc 
------------------
-" > $jobname
+---------------------------------------------------------------
+" >> $jobname
 	echo "New job entered: 
-	------------------------------------------"
+---------------------------------------------------------------"
 	 cat $jobname
 	 read -p "Edit this job file? (y/n) " ednow
 	 if [[ $ednow = y ]]; then
