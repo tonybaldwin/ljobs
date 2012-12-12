@@ -19,12 +19,22 @@ if [[ $1 = r ]]; then
 		for i in $(ls -Rt *.ljob); do cat $i; done | less
 	fi
 else
+if [[ $1 = d ]]; then
+	read -p "Are you certain you wish to delete $2? (y/n)" yesdel
+	if [[ $yesdel == "y" ]];
+		then rm $2
+		echo "$2 deleted."
+	else
+		echo "$2 not deleted."
+	fi
+else
 if [[ $1 = h || -z $1 ]]; then
 	echo "ljob - language service provider jobs data management tool in bash by tony baldwin - http://tonyb.us/ljobs
 	-----------------------------------------------------------------------------------------
 ljob n - creates a new ljob file (automatic assignment of filename).
-ljob n filename - creates new job file with \"filename\" as the name. filename must beging with date parameters (YYYYMMDD) for other functions to work properly!
+ljob n filename - creates new job file with \"filename\" as the name. filename must begin with date parameters (YYYYMMDD) for other functions to work properly!
 ljob e - opens a file for editing. MUST specify full file name (i.e. ljob e 20121031082439.ljob)
+ljob d filename - delete file \"filename\". Must use full filename.
 ljob v - view file. Must specify full file name (i.e. ljob v 201203241542.exp)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
 ljob r yyyymmdd - reads job entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
