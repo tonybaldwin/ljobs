@@ -19,8 +19,9 @@ This will place ljobs in ~/bin/ljob
 USEAGE
 ------------
 ljob n - creates a new ljob file. (automatic assignment of filename, yyyymmddHHMMss.client.ljob)
-ljob n filename - creates new job file with "filname" as file name (filename MUST begin with date parameters, yyyymmdd, or other functions won't work).
+ljob n filename - creates new job file with "filename" as file name (filename MUST begin with date parameters, yyyymmdd, or other functions won't work).
 ljob e - opens a file for editing. MUST specify full file name (i.e. ljob e 20121031082439.ljob)
+ljob d filename - deletes file with "filename". Must use complete filename. 
 ljob v - view a file. MUST specify full file name (i.e. ljob v 20121314152245.exp)
 ljob r - reads all entries (cats all files in the dir, pipes to less)
 ljob r yyyymmdd - reads entries from date yyyymmdd. One can specify just yyyymm, or just yyyy, even.
