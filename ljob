@@ -296,11 +296,11 @@ if [[ $1 = mo ]]; then
 			echo "reported net income from ljobs $2 = $currency $neti" >> $2.month
 			echo "Verification: $gross - $paid = $repnet" >> $2.month
 			echo "This should be the same as $currency $neti." >> $2.month
-			echo "Expenses for $2 = $xpns" >> $2.month
 			echo "-------------------------------------" >> $2.month
-			echo "Net income, after expenses, for $2 = $currency $netminx" >> $2.month
+			echo "Expenses for $2 = $xpns" >> $2.month
+			echo "Net invoices, after expenses, for $2 = $currency $netminx" >> $2.month
 			echo "Payments received for $2 = $currency $pays" >> $2.month
-			echo "Net income after expenses = $pays - $xpns = $toti" >> $2.month
+			echo "Net income received after expenses = $pays - $xpns = $toti" >> $2.month
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net
@@ -359,12 +359,11 @@ if [[ $1 = yr ]]; then
 			echo "reported net income from ljobs $2 = $currency $neti" >> $2.year
 			echo "Verification: $gross - $paid = $currency $repnet" >> $2.year
 			echo "This should be the same as $currency $neti." >> $2.year
-			echo "Expenses for $2 = $currency $xpns" >> $2.year
 			echo "----------------------------------" >> $2.year
+			echo "Expenses paid for $2 = $currency $xpns" >> $2.year
 			echo "Net invoices, after expenses, for $2 = $currency $netminx" >> $2.year
-			echo "----------------------------------" >> $2.year
 			echo "Payments received for $2 = $currency $pays" >> $2.year
-			echo "Net income after expenses = $pays - $xpns = $toti" >> $2.year
+			echo "Net income received after expenses = $pays - $xpns = $toti" >> $2.year
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net
