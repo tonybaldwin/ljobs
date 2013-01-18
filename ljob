@@ -253,6 +253,7 @@ if [[ $1 = mo ]]; then
 		else 
 			mv $2.month $2.month.bak
 			mv $2.expense $2.expense.bak
+			mv $2.payments $2.payments.bak
 		fi
 	fi
 		gross=0
@@ -315,6 +316,7 @@ if [[ $1 = yr ]]; then
 		else 
 			mv $2.year $2.year.bak
 			mv $2.expense $2.expense.bak
+			mv $2.payments $2.payments.bak
 		fi
 	fi
 		gross=0
