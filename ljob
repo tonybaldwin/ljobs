@@ -43,6 +43,9 @@ ljob lj - lists all ljob entries. Like r, it can be narrowed down with date para
 ljob lo - list only jobs with outsourcing; can be limited to date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
+ljob pm - enter a new payment received.
+ljob lp - list payments (can be limited with data parameters).
+ljob pr - read payments/income report (limit with data parameters).
 ljob s searchterm - searches for searchterm in dream entries. Can be limited with data parameters (i.e. ljob s searchterm YYYYMM).
 ljob mo yyyymm - generates and displays income report for month yyyymm, to date.
 ljob yr yyyy - generates and displays income report for year yyyy, to date.
@@ -51,6 +54,23 @@ ljob xr - read expense report, limited with date parameters (ljob xr 201211 for 
 ljob up - list jobs as yet unpaid.
 ljob us - list jobs with unsettled provider invoices.
 ljob h - displays this help message."
+else
+if [[ $1 = pm ]] ; then
+	xdate=$(date +%Y%m%d)
+	read -p "Client: " client
+	read -p "Project no.: " pno
+	read -p "method (paypal, check): " method
+	read -p "amount: " amount
+	read -p "deductions: " deduct
+	total=`echo "$amount-$deduct" | bc`
+	echo "Date:	$xdate
+Client:	$client
+Project no.: 	$pno
+Method:	$method
+Amount:	$amount
+Deductions:	$deduct
+-------------------------------
+Total:	$total" >> $filedate.pmt
 else
 if [[ $1 = xa ]]; then
 	xdate=$(date +%Y%m%d)
@@ -64,6 +84,22 @@ Type	$xtype
 Description	$xdesc
 Amount	$xamt" > $filedate.exp
 echo "------------" >> $filedate.exp
+else
+if [[ $1 = pr ]]; then
+	if [[ $2 ]]; then
+		for ex in $(ls $2*.pmt); do
+			grep Total: $ex | awk '{ print $2 }' >> $2.pmt
+		done
+		pays=0
+		for pm in $(cat $2.pmt); do
+			pays=`echo "$pays+$pm" | bc`
+		done
+		echo " Total payments for $2 = $pays" > $2.pmt
+		cat $2*.pmt | less
+		rm $2.pmt
+	else
+		echo "You neglected to provide data parameters. Try again."	
+	fi
 else
 if [[ $1 = xr ]]; then
 	if [[ $2 ]]; then
@@ -95,6 +131,13 @@ if [[ $1 = lr ]]; then
 	else
 		ls -1t *.month
 		ls -1t *.year
+	fi
+else
+if [[ $1 = lp ]]; then
+	if [[ $2 ]]; then
+		ls -1t *.pmt | grep $2
+	else
+		ls -1t *.pmt
 	fi
 else
 if [[ $1 = lx ]]; then
@@ -216,10 +259,17 @@ if [[ $1 = mo ]]; then
 		paid=0
 		neti=0
 		xpns=0
+		pays=0
 		for job in $(ls $2*.ljob); do
 			grep grossincome $job | awk '{ print $2 }' >> $2.gross
 			grep paidouts $job | awk '{ print $2 }' >> $2.out
 			grep netincome $job | awk '{ print $2 }' >> $2.net
+		done
+		for pt in $(ls $2*.pmt); do
+			grep Total:  $pt | awk '{ print $2 }' >> $2.payments
+		done
+		for pm in $(cat $2.payments); do
+			pays=`echo "$pays+$pm" | bc`
 		done
 		for ex in $(ls $2*.exp); do
 			grep Amount $ex| awk '{ print $2 }' >> $2.expense
@@ -238,6 +288,7 @@ if [[ $1 = mo ]]; then
 		done
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
+			toti=`echo "$pays-$xpns" | bc`
 			echo "----- Monthly Income Report $2 -----" > $2.month
 			echo "reported gross income for $2 = $currency $gross" >> $2.month
 			echo "reported total paidouts for $2 = $currency $paid" >> $2.month
@@ -247,6 +298,8 @@ if [[ $1 = mo ]]; then
 			echo "Expenses for $2 = $xpns" >> $2.month
 			echo "-------------------------------------" >> $2.month
 			echo "Net income, after expenses, for $2 = $currency $netminx" >> $2.month
+			echo "Payments received for $2 = $currency $pays" >> $2.month
+			echo "Net income after expenses = $pays - $xpns = $toti" >> $2.month
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net
@@ -268,10 +321,17 @@ if [[ $1 = yr ]]; then
 		paid=0
 		neti=0
 		xpns=0
+		pays=0
 		for job in $(ls $2*.ljob); do
 			grep grossincome $job | awk '{ print $2 }' >> $2.gross
 			grep paidouts $job | awk '{ print $2 }' >> $2.out
 			grep netincome $job | awk '{ print $2 }' >> $2.net
+		done
+		for pt in $(ls $2*.pmt); do
+			grep Total:  $pt | awk '{ print $2 }' >> $2.payments
+		done
+		for pm in $(cat $2.payments); do
+			pays=`echo "$pays+$pm" | bc`
 		done
 		for ex in $(ls $2*.exp); do
 			grep Amount $ex | awk '{ print $2 }' >> $2.expense
@@ -290,15 +350,19 @@ if [[ $1 = yr ]]; then
 		done
 			netminx=`echo "$neti-$xpns" | bc`
 			repnet=`echo "$gross-$paid" | bc`
+			toti=`echo "$pays-$xpns" | bc`
 			echo "----- Yearly Income Report $2 -----" > $2.year
-			echo "reported gross income for $2 = $currency $gross" >> $2.year
+			echo "reported gross invoices for $2 = $currency $gross" >> $2.year
 			echo "reported total paidouts for $2 = $currency $paid" >> $2.year
 			echo "reported net income from ljobs $2 = $currency $neti" >> $2.year
 			echo "Verification: $gross - $paid = $currency $repnet" >> $2.year
 			echo "This should be the same as $currency $neti." >> $2.year
 			echo "Expenses for $2 = $currency $xpns" >> $2.year
 			echo "----------------------------------" >> $2.year
-			echo "Net income, after expenses, for $2 = $currency $netminx" >> $2.year
+			echo "Net invoices, after expenses, for $2 = $currency $netminx" >> $2.year
+			echo "----------------------------------" >> $2.year
+			echo "Payments received for $2 = $currency $pays" >> $2.year
+			echo "Net income after expenses = $pays - $xpns = $toti" >> $2.year
 		rm $2.gross 
 		rm $2.out 
 		rm $2.net
@@ -308,6 +372,9 @@ fi
 fi
 fi	
 fi	
+fi
+fi
+fi
 fi
 fi
 fi

@@ -29,6 +29,9 @@ ljob l - lists everything in ljob's directory (reports, jobs, expenses, etc.)
 ljob lj - lists all ljob entries. Like r, it can be narrowed down with date parameters.
 ljob lr - lists all monthly and yearly reports. Can be limited with date parameters.
 ljob lx - lists expense reports. Can be limited with date parameters.
+ljob pm - enter a new payment received.
+ljob lp - list payments (can be limited with data parameters).
+ljob pr - read payments/income report (limit with data parameters).
 ljob lo - list only jobs with outsourcing
 ljob s searchterm - searches for searchterm in dream entries. Can be limited with data parameters (i.e. ljob s searchterm YYYYMM).
 ljob month yyyymm - generates and displays income report for month yyyymm, to date.
@@ -47,3 +50,5 @@ For free currency conversions, see http://www.xe.com
 
 TIPS
 For further information see http://tonyb.us/ljobs
+
+updated: 2013.01.18
