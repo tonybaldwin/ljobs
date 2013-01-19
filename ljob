@@ -70,7 +70,9 @@ Method:	$method
 Amount:	$amount
 Deductions:	$deduct
 -------------------------------
-Total:	$total" >> $filedate.pmt
+Total:	$total
+-------------------------------
+" >> $filedate.pmt
 else
 if [[ $1 = xa ]]; then
 	xdate=$(date +%Y%m%d)
